@@ -1,0 +1,61 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+    }
+}
+
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '2.0.2'
+}
+
+group 'com.helloworld.serde'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile("org.apache.hive:hive-common:3.0.0") {
+        transitive = false
+    }
+    compile("org.apache.hive:hive-exec:3.0.0") {
+        transitive = false
+    }
+
+    compile("org.apache.hadoop:hadoop-common:3.1.0@jar")
+    compile("org.apache.hadoop:hadoop-mapreduce-client-core:3.1.0@jar")
+    compile("org.slf4j:slf4j-api:1.7.15")
+
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+shadowJar {
+    zip64 true
+    mergeServiceFiles()
+    classifier = ''
+
+    relocate 'org.apache.http', 'shaded.org.apache.http'
+    relocate 'org.apache.solr', 'shaded.org.apache.solr'
+    relocate 'jline', 'shaded.jline'
+
+    // Remove unwanted files in root jar (repackaging)
+    exclude 'JDOMAbout*.class'
+    exclude '.gitkeep'
+    exclude '*.txt'
+    exclude '*.dtd'
+    exclude '*.gif'
+    exclude '*.properties'
+    exclude '*.xml'
+    exclude '*.ico'
+    exclude '*.lst'
+    exclude '*.css'
+    exclude 'NOTICE'
+    exclude 'JHIGHLIGHT_VERSION'
+    exclude 'LICENSE'
+}
