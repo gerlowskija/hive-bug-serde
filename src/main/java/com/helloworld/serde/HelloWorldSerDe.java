@@ -18,17 +18,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class HelloWorldSerDe extends AbstractSerDe {
-
-    public HelloWorldSerDe() {
-
-    }
-
     private static final Logger LOG = LoggerFactory.getLogger(HelloWorldSerDe.class);
-
     protected List<String> colNames;
     protected List<TypeInfo> colTypes;
     protected StructTypeInfo typeInfo;
     protected ObjectInspector inspector;
+
+    public HelloWorldSerDe() {}
 
     @Override
     public Class<? extends Writable> getSerializedClass() {
@@ -39,18 +35,15 @@ public class HelloWorldSerDe extends AbstractSerDe {
     public void initialize(Configuration conf, Properties tblProperties) throws SerDeException {
         colNames = Arrays.asList(new String[] {"hello_col", "world_col"});
         colTypes = new ArrayList<TypeInfo>();
-        colTypes.add(TypeInfoFactory.getCharTypeInfo(100));
-        colTypes.add(TypeInfoFactory.getCharTypeInfo(100));
+        colTypes.add(TypeInfoFactory.getCharTypeInfo(20));
+        colTypes.add(TypeInfoFactory.getCharTypeInfo(20));
 
         typeInfo = (StructTypeInfo) TypeInfoFactory.getStructTypeInfo(colNames, colTypes);
         inspector = TypeInfoUtils.getStandardJavaObjectInspectorFromTypeInfo(typeInfo);
     }
 
-    public void heyLookAtMe() {}
-
     @Override
     public Object deserialize(Writable data) throws SerDeException {
-        LOG.warn("JEGERLOW We're in deserialize!");
         if (!(data instanceof HelloWorldWritable)) {
             LOG.warn("JEGERLOW: Received unexpected Writable class.  Expected {} from classloader {}, but actually was {} from classloader {}",
                     HelloWorldWritable.class.getCanonicalName(), HelloWorldWritable.class.getClassLoader().toString(),
@@ -66,8 +59,8 @@ public class HelloWorldSerDe extends AbstractSerDe {
 
     @Override
     public Writable serialize(Object data, ObjectInspector objInspector) throws SerDeException {
-        // Unimplemented. Return any old writable.
-        return new HelloWorldWritable();
+        // Unimplemented, return any old value
+        return new HelloWorldWritable("HELLO_WORLD");
     }
 
     @Override

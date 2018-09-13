@@ -1,13 +1,12 @@
 package com.helloworld.serde;
 
+import org.apache.hadoop.mapred.InputFormat;
 import org.apache.hadoop.mapred.OutputFormat;
 import org.apache.hadoop.hive.ql.metadata.DefaultStorageHandler;
 import org.apache.hadoop.hive.serde2.AbstractSerDe;
 
 public class HelloWorldStorageHandler extends DefaultStorageHandler {
-    public HelloWorldStorageHandler() {
-
-    }
+    public HelloWorldStorageHandler() {}
 
     @Override
     public Class<? extends AbstractSerDe> getSerDeClass() {
@@ -18,4 +17,7 @@ public class HelloWorldStorageHandler extends DefaultStorageHandler {
     public Class<? extends OutputFormat> getOutputFormatClass() {
         return HelloWorldOutputFormat.class;
     }
+
+    @Override
+    public Class<? extends InputFormat> getInputFormatClass() { return HelloWorldInputFormat.class; }
 }
